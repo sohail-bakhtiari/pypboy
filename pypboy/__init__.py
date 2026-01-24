@@ -43,7 +43,9 @@ class BaseModule(game.EntityGroup):
 
         self.action_handlers = {
             "pause": self.handle_pause,
-            "resume": self.handle_resume
+            "resume": self.handle_resume,
+            "next_submodule": self.handle_next_submodule,
+            "prev_submodule": self.handle_prev_submodule
         }
 
         self.switch_submodule(0)
@@ -106,6 +108,14 @@ class BaseModule(game.EntityGroup):
         # GPIO.output(self.GPIO_LED_ID, True)
         if settings.SOUND_ENABLED:
             self.module_change_sfx.play()
+    
+    def handle_next_submodule(self):
+        self.switch_submodule((self.currentSubmodule + 1) % len(self.submodules))
+        
+    def handle_prev_submodule(self):
+        self.switch_submodule((self.currentSubmodule - 1) % len(self.submodules))
+        
+        
 
 
 class SubModule(game.EntityGroup):

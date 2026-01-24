@@ -4,13 +4,19 @@ import atexit
 import saved
 import os
 
+try:
+    import RPi.GPIO as GPIO
+    GPIO_AVAILABLE = True
+except ImportError:
+    GPIO_AVAILABLE = False
+
 # Custom
-name = "ZapWizard"
+name = "BestPi"
 
 # SCREEN
 WIDTH = 720
 HEIGHT = 720
-FULLSCREEN = False
+FULLSCREEN = True
 
 # OUTPUT_WIDTH = 720
 # OUTPUT_HEIGHT = 720
@@ -100,7 +106,17 @@ ACTIONS = {
 # Using GPIO.BCM as mode
 # GPIO 23 pin16 reboot
 # GPIO 25 pin 22 blank screen do not use
-GPIO_ACTIONS = {
+gpio_actions = {
+    11: "module_stats",
+    18: "module_items",
+    13: "module_data",
+    19: "module_map",
+    26: "module_radio",
+    36: "next_submodule",
+    37: "prev_submodule",
+    29: "dial_up",
+    33: "dial_down"
+    
     #    19: "module_stats", #GPIO 4
     #    26: "module_items", #GPIO 14
     #    16: "module_data", #GPIO 15

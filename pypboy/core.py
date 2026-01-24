@@ -16,6 +16,7 @@ from pypboy.modules import passcode
 
 if settings.GPIO_AVAILABLE:
     import RPi.GPIO as GPIO
+    GPIO.setmode(GPIO.BOARD)
 
 
 class Pypboy(game.core.Engine):
@@ -33,8 +34,8 @@ class Pypboy(game.core.Engine):
         self.init_modules()
 
         self.gpio_actions = {}
-        # if settings.GPIO_AVAILABLE:
-        # self.init_gpio_controls()
+        if settings.GPIO_AVAILABLE:
+            self.init_gpio_controls()
 
         self.prev_fps_time = 0
 
@@ -63,10 +64,12 @@ class Pypboy(game.core.Engine):
             print("Initialing pin %s as action '%s'" % (pin, settings.gpio_actions[pin]))
             GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
             self.gpio_actions[pin] = settings.gpio_actions[pin]
+        print("%s GPIO Controls Initialized" % len(self.gpio_actions.keys()))
 
     def check_gpio_input(self):
         for pin in self.gpio_actions.keys():
             if GPIO.input(pin) == False:
+                # print("GPIO Pin %s Pressed, Action: %s" % (pin, self.gpio_actions[pin]))
                 self.handle_action(self.gpio_actions[pin])
 
     # def render(self):
