@@ -1,12 +1,17 @@
-## About this fork
+# About this fork
 
-To match the 3D printed [Raspberry Pi Pipboy](https://makerworld.com/en/models/1805084-raspberry-pi-pipboy?from=search#profileId-1925209), the GPIO handling is enabled for the buttons to work.
-
-I've also added two handlres called `next_submodule` and `prev_submodule`, to replace the 5 knobs with two buttons.
+To match the 3D printed [Raspberry Pi Pipboy](https://makerworld.com/en/models/1805084-raspberry-pi-pipboy?from=search#profileId-1925209), some changes are needed for the big LCD and the buttons to work properly.
 
 Since I am running this on a "Lite" version of Raspberry PI OS, with no desktop, I replaced the gpio.py that comes with the model and made it work with `evdev` so it works without a desktop. You just need it to make sure the buttons are setup correctly, otherwise the handling is done in other source files.
 
 
+## Changes
+
+- Layout adjusted for an 800×480 display.
+- Nine GPIO-controlled buttons enabled: F1–F5, Up, Down, Left, Right.
+- Left/Right handlers switch submodules (equivalent to number keys 1–5).
+- Footer shows date in ISO 8601 format (YYYY-MM-DD).
+- Footer displays current IP address for easy SSH access.
 
 ## Autorun as a service
 
