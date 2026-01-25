@@ -1,3 +1,108 @@
+## About this fork
+
+To match the 3D printed [Raspberry Pi Pipboy](https://makerworld.com/en/models/1805084-raspberry-pi-pipboy?from=search#profileId-1925209), the GPIO handling is enabled for the buttons to work.
+
+I've also added two handlres called `next_submodule` and `prev_submodule`, to replace the 5 knobs with two buttons.
+
+Since I am running this on a "Lite" version of Raspberry PI OS, with no desktop, I replaced the gpio.py that comes with the model and made it work with `evdev` so it works without a desktop. You just need it to make sure the buttons are setup correctly, otherwise the handling is done in other source files.
+
+
+
+## Autorun as a service
+
+
+To make the Pip-Boy start automatically on a Raspberry Pi, the best method is using **systemd**. This ensures that the program starts after the network and graphics are ready, and it can automatically restart the app if it crashes.
+
+I assume you are using a **virtual environment (venv)**, so we need to point the service specifically to the python executable inside that folder.
+
+---
+
+### 1. Create the Service File
+
+Run the following command to create a new service file:
+
+```bash
+sudo nano /etc/systemd/system/pypboy.service
+```
+
+### 2. Paste the Configuration
+
+Paste the following into the editor. **Note:** I am assuming your username is `pi` and the folder is `/home/pi/pypboy`. If your path is different, adjust it accordingly.
+
+```ini
+[Unit]
+Description=PyPboy Interface
+After=network.target
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory=/home/pi/pypboy
+# Points to the python inside your venv
+ExecStart=/home/pi/pypboy/venv/bin/python main.py
+Restart=on-failure
+RestartSec=5
+Environment=PYTHONUNBUFFERED=1
+# If using a physical screen, you might need to specify the display
+Environment=DISPLAY=:0
+
+[Install]
+WantedBy=multi-user.target
+```
+
+*Press `Ctrl+O`, `Enter`, then `Ctrl+X` to save and exit.*
+
+---
+
+### 3. Enable and Start the Service
+
+Now, tell the system to recognize the new service and run it at boot:
+
+```bash
+# Reload the systemd daemon to see the new file
+sudo systemctl daemon-reload
+
+# Enable it to start on boot
+sudo systemctl enable pypboy.service
+
+# Start it now to test it
+sudo systemctl start pypboy.service
+```
+
+### 4. How to Check the Status
+
+If the app doesn't appear, or you want to see the logs (to check for that `xmltodict` error), use:
+
+```bash
+sudo systemctl status pypboy.service
+```
+
+To see live logs as the app runs:
+
+```bash
+journalctl -u pypboy.service -f
+```
+
+---
+
+### Important: Permissions for Graphics
+
+If you are running Raspberry Pi OS with a desktop (GUI), the service above should work. However, if you are running in **CLI/Lite mode**, Pygame needs permission to access the framebuffer.
+
+If it fails to start, try adding your user to the video and input groups:
+
+```bash
+sudo usermod -a -G video,input pi
+```
+
+### Next Step
+
+Try rebooting your Pi with `sudo reboot` to see if it launches on its own!
+
+**Would you like me to show you how to add a "Safe Shutdown" button to your Python code so you can turn off the Pi safely from the Pip-Boy interface?**
+
+#
+Here is the original README.md :
 # pypboy
 
 > _Notes from ZapWizard:_
