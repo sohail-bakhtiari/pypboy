@@ -14,20 +14,20 @@ except ImportError:
 name = "BestPi"
 
 # SCREEN
-WIDTH = 720
-HEIGHT = 720
-FULLSCREEN = True
+WIDTH = 800
+HEIGHT = 480
+FULLSCREEN = False
 
-# OUTPUT_WIDTH = 720
-# OUTPUT_HEIGHT = 720
+OUTPUT_WIDTH = 800
+OUTPUT_HEIGHT = 480
 
 # Menu Position
 menu_x = 10
-menu_y = 140
+menu_y = 115 #140
 
 # Menu Position
 footer_x = 0
-footer_y = 631
+footer_y = 445 #631
 
 # Description box Position
 description_box_x = 350
