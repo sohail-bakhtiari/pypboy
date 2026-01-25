@@ -235,7 +235,7 @@ class Footer(game.Entity):
 
     def time_text(self):
         now = datetime.now()
-        date = str(now.strftime("%m") + "/" + now.strftime("%d") + "/" + now.strftime("%Y"))
+        date = str( now.strftime("%Y") + "-" +  now.strftime("%m") + "-" + now.strftime("%d"))
         time = now.strftime("%H:%M:%S")
         return date, time
 
