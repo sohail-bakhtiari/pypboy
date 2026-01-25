@@ -180,7 +180,7 @@ class Health(game.Entity):
         settings.FreeRobotoB[24].render_to(self.image, (490 + x_adjust, 395 + y_adjust), "10", settings.bright) # Rad count
 
         #User name
-        settings.FreeRobotoB[24].render_to(self.image, (301 + x_adjust, 448 + y_adjust), settings.name, settings.bright)
+        # settings.FreeRobotoB[24].render_to(self.image, (301 + x_adjust, 448 + y_adjust), settings.name, settings.bright)
 
     # def handle_resume(self):
     #     pass
