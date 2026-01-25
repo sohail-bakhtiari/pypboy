@@ -23,11 +23,11 @@ import urllib
 class Module(pypboy.SubModule):
     label = "LOCAL MAP"
     zoom = settings.LOCAL_MAP_ZOOM
-    map_top_edge = 128
+    map_top_edge = 80 #128
     map_type = settings.MAP_TYPE
-    map_width = 720
-    map_height = 545
-    map_rect = pygame.Rect(0, (map_width - 720) / 2, map_width, map_height - 45)
+    map_width = 800 #720
+    map_height = 400 #545
+    map_rect = pygame.Rect(0, (map_width - 800) / 2, map_width, map_height - 45)
 
     def __init__(self, *args, **kwargs):
         super(Module, self).__init__(*args, **kwargs)

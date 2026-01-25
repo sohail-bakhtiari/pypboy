@@ -56,7 +56,7 @@ class TopMenu(game.Entity):
         self.title = []
         super(TopMenu, self).__init__((settings.WIDTH, 40))
         self.rect[0] = 0
-        self.rect[1] = 51
+        self.rect[1] = 0 #51
         self.saved_label = None
 
     def render(self):
@@ -154,7 +154,7 @@ class SubMenu(game.Entity):
         super(SubMenu, self).__init__((settings.WIDTH, 36))
         self.menu = []
         self.rect[0] = 73
-        self.rect[1] = 93
+        self.rect[1] = 45 #93
         self.prev_time = 0
         self.selected = None
         self.saved_module = None
@@ -400,12 +400,12 @@ class Menu(game.Entity):
         self.animation_time = 0.2
         self.index = 0
         self.top_of_menu = 0
-        self.max_items = 10
+        self.max_items = 6
         self.menu_array = self.source_array[self.top_of_menu:self.max_items]  # List the array for display
         self.prev_selection = 0
 
         self.descriptionbox = pygame.Surface((360, 300))
-        self.imagebox = pygame.Surface((240, 240))
+        self.imagebox = pygame.Surface((180, 180))
 
         self.saved_selection = 0
 
@@ -547,15 +547,15 @@ class Menu(game.Entity):
                     stat_offset = 0
                     self.descriptionbox.fill((0, 0, 0))
                     for each in stats:
-                        stat_text = settings.RobotoB[30].render(" %s " % each[0], True, (settings.bright),
+                        stat_text = settings.RobotoR[15].render(" %s " % each[0], True, (settings.bright),
                                                                 (settings.dark))
-                        stat_number = settings.RobotoB[30].render(" %s " % each[1], True, (settings.bright),
+                        stat_number = settings.RobotoR[15].render(" %s " % each[1], True, (settings.bright),
                                                                   (settings.dark))
                         stat_rect = (0, stat_offset, 350, stat_text.get_size()[1])
                         pygame.draw.rect(self.descriptionbox, (settings.dark), stat_rect)
                         self.descriptionbox.blit(stat_text, (0, stat_offset))
                         self.descriptionbox.blit(stat_number, (350 - stat_number.get_size()[0], stat_offset))
-                        stat_offset += stat_text.get_size()[1] + 6
+                        stat_offset += stat_text.get_size()[1] + 4
 
                     self.image.blit(self.descriptionbox, (settings.description_box_x, settings.description_box_y))
 
@@ -616,8 +616,10 @@ class Menu(game.Entity):
                         self.frame += 1
 
                     self.file = self.images[self.index]
-                    self.imagebox.blit(self.file, (0, 0))
+                    # Scale the frame to fit the new imagebox size
+                    scaled_file = pygame.transform.smoothscale(self.file, self.imagebox.get_size())
+                    self.imagebox.blit(scaled_file, (0, 0))
                     self.imagebox.fill(settings.bright, None, pygame.BLEND_RGBA_MULT)
-                    self.image.blit(self.imagebox, (400, 0))
+                    self.image.blit(self.imagebox, (480, 30))
 
                     self.index += 1

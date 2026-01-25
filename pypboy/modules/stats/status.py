@@ -1,4 +1,10 @@
 from game.core import Entity
+
+# Position adjustments
+x_adjust = 30
+y_adjust = -55
+scale_adj = 0.75
+
 import pypboy
 import pygame
 import game
@@ -23,13 +29,13 @@ class Module(pypboy.SubModule):
 
 
         self.health = Health()
-        self.health.rect[0] = 0
-        self.health.rect[1] = 131
+        self.health.rect[0] = 0 + x_adjust
+        self.health.rect[1] = 131 + y_adjust
         self.add(self.health)
-        
+
         self.animation = Animation()
-        self.animation.rect[0] = 296
-        self.animation.rect[1] = 190
+        self.animation.rect[0] = 296 + x_adjust
+        self.animation.rect[1] = 190 + y_adjust
         self.add(self.animation)
 
         self.prev_time = 0
@@ -62,19 +68,19 @@ class Module(pypboy.SubModule):
 
             if self.delta_time >= settings.glitch_time:
                 if settings.glitch_next == 0 or settings.glitch_next == 2 or settings.glitch_next == 4:
-                    self.health.rect[1] = -69
-                    self.footer.rect[1] = 62
-                    self.animation.rect[1] = -10
+                    self.health.rect[1] = -69 + y_adjust
+                    self.footer.rect[1] = 62 + y_adjust
+                    self.animation.rect[1] = -10 + y_adjust
                     self.prev_time = self.current_time
                 elif settings.glitch_next == 1 or settings.glitch_next == 3 or settings.glitch_next == 5:
-                    self.health.rect[1] = 331
-                    self.footer.rect[1] = 531
-                    self.animation.rect[1] = 390
+                    self.health.rect[1] = 331 + y_adjust
+                    self.footer.rect[1] = 531 + y_adjust
+                    self.animation.rect[1] = 390 + y_adjust
                     self.prev_time = self.current_time
                 elif settings.glitch_next == 6:
-                    self.health.rect[1] = 131
-                    self.animation.rect[1] = 190
-                    self.footer.rect[1] = settings.footer_y
+                    self.health.rect[1] = 131 + y_adjust
+                    self.animation.rect[1] = 190 + y_adjust
+                    self.footer.rect[1] = settings.footer_y + y_adjust
                     self.prev_time = self.current_time
                 elif settings.glitch_next >= 7:
                     settings.glitch_next = 0
@@ -90,7 +96,7 @@ class Animation(game.Entity):
     def __init__(self):
         super(Animation, self).__init__()
 
-        self.image = pygame.Surface((120,250))   
+        self.image = pygame.Surface((settings.WIDTH - 50, settings.HEIGHT))
         self.animation_time = 0.125 # 8 fps
         self.steps = list(range(4)) + list(range(4, 0, -1))
         self.index = 0                
@@ -124,9 +130,12 @@ class Animation(game.Entity):
             if self.index >= len(self.images):
                 self.index = 0
             self.file = self.images[self.index]
-
-            self.image.blit((self.file),(1 + self.steps[self.index] // 2,68 + self.steps[self.index]))
-            self.image.blit((self.head),(29 + self.steps[self.index] // 2,0 + self.steps[self.index]))
+            
+            scaled_file = pygame.transform.smoothscale(self.file, (self.file.get_width() * scale_adj, self.file.get_height() * scale_adj))
+            scaled_head = pygame.transform.smoothscale(self.head, (self.head.get_width() * scale_adj, self.head.get_height() * scale_adj))
+    
+            self.image.blit((scaled_file), (20 + self.steps[self.index] // 2 + x_adjust * scale_adj, 20 + 78 + self.steps[self.index] + y_adjust * scale_adj))
+            self.image.blit((scaled_head), (41 + self.steps[self.index] // 2 + x_adjust * scale_adj, 20 + 25 + self.steps[self.index] + y_adjust * scale_adj))
             # settings.FreeRobotoB[24].render_to(self.image, (0, 0), str(self.fps), settings.bright) #FPS
 
             self.index += 1
@@ -137,54 +146,41 @@ class Health(game.Entity):
     def __init__(self):
         super(Health, self).__init__()
 
-        self.image = pygame.Surface((settings.WIDTH, settings.HEIGHT - 180))
+        self.image = pygame.Surface((settings.WIDTH - 50, settings.HEIGHT - 80))
         self.image.fill((0,0,0))
-        #
-        # # Bottom Boxes
-        # pygame.draw.rect(self.image, settings.dim, (0, 501, 166, 38)) #Hit point background
-        # pygame.draw.rect(self.image, settings.dim, (170, 501, 370, 38)) #Level bar background
-        # pygame.draw.lines(self.image, settings.mid,True,[(282,515),(529,515),(529,529),(282,529)], 3) #Level bar surround
-        # pygame.draw.rect(self.image, settings.bright, (285, 517, 179, 11)) #Level bar fill
-        # pygame.draw.rect(self.image, settings.dim, (544, 501, 176, 38)) #Actiion background
-        
 
         # Middle Boxes
-        pygame.draw.rect(self.image, settings.dim, (203, 358, 64, 62)) #Gun box
-        pygame.draw.rect(self.image, settings.dim, (273, 358, 38, 62)) #Ammo box
-        pygame.draw.rect(self.image, settings.dim, (328, 358, 64, 62)) #Helmet box
-        pygame.draw.rect(self.image, settings.dim, (398, 358, 38, 62)) #Armor box
-        pygame.draw.rect(self.image, settings.dim, (440, 358, 38, 62)) #Energy box
-        pygame.draw.rect(self.image, settings.dim, (483, 358, 38, 62)) #Radiation box
+        pygame.draw.rect(self.image, settings.dim, (203 + x_adjust, 358 + y_adjust, 64, 62)) #Gun box
+        pygame.draw.rect(self.image, settings.dim, (273 + x_adjust, 358 + y_adjust, 38, 62)) #Ammo box
+        pygame.draw.rect(self.image, settings.dim, (328 + x_adjust, 358 + y_adjust, 64, 62)) #Helmet box
+        pygame.draw.rect(self.image, settings.dim, (398 + x_adjust, 358 + y_adjust, 38, 62)) #Armor box
+        pygame.draw.rect(self.image, settings.dim, (440 + x_adjust, 358 + y_adjust, 38, 62)) #Energy box
+        pygame.draw.rect(self.image, settings.dim, (483 + x_adjust, 358 + y_adjust, 38, 62)) #Radiation box
 
         # Icons
-        self.image.blit(pygame.image.load('images/stats/gun.png').convert_alpha(),(210,374))
-        self.image.blit(pygame.image.load('images/stats/reticle.png').convert_alpha(),(284,363))
-        self.image.blit(pygame.image.load('images/stats/helmet.png').convert_alpha(),(338,373))
-        self.image.blit(pygame.image.load('images/stats/shield.png').convert_alpha(),(410,362))
-        self.image.blit(pygame.image.load('images/stats/bolt.png').convert_alpha(),(453,362))
-        self.image.blit(pygame.image.load('images/stats/radiation.png').convert_alpha(),(491,363))
+        self.image.blit(pygame.image.load('images/stats/gun.png').convert_alpha(),(210 + x_adjust,374 + y_adjust))
+        self.image.blit(pygame.image.load('images/stats/reticle.png').convert_alpha(),(284 + x_adjust,363 + y_adjust))
+        self.image.blit(pygame.image.load('images/stats/helmet.png').convert_alpha(),(338 + x_adjust,373 + y_adjust))
+        self.image.blit(pygame.image.load('images/stats/shield.png').convert_alpha(),(410 + x_adjust,362 + y_adjust))
+        self.image.blit(pygame.image.load('images/stats/bolt.png').convert_alpha(),(453 + x_adjust,362 + y_adjust))
+        self.image.blit(pygame.image.load('images/stats/radiation.png').convert_alpha(),(491 + x_adjust,363 + y_adjust))
 
         # Health Bars
-        pygame.draw.line(self.image, settings.bright, (344, 32), (379, 32), 9)
-        pygame.draw.line(self.image, settings.bright, (465, 134), (500, 134), 9)
-        pygame.draw.line(self.image, settings.bright, (465, 266), (500, 266), 9)
-        pygame.draw.line(self.image, settings.bright, (344, 318), (379, 318), 9)
-        pygame.draw.line(self.image, settings.bright, (216, 266), (251, 266), 9)
-        pygame.draw.line(self.image, settings.bright, (216, 134), (251, 134), 9)
-        
+        pygame.draw.line(self.image, settings.bright, (344 + x_adjust, 45 + 32 + y_adjust), (379 + x_adjust, 45 + 32 + y_adjust), 9)
+        pygame.draw.line(self.image, settings.bright, (465 + x_adjust, 134 + y_adjust), (500 + x_adjust, 134 + y_adjust), 9)
+        pygame.draw.line(self.image, settings.bright, (465 + x_adjust, 266 + y_adjust), (500 + x_adjust, 266 + y_adjust), 9)
+        pygame.draw.line(self.image, settings.bright, (344 + x_adjust, 318 + y_adjust), (379 + x_adjust, 318 + y_adjust), 9)
+        pygame.draw.line(self.image, settings.bright, (216 + x_adjust, 266 + y_adjust), (251 + x_adjust, 266 + y_adjust), 9)
+        pygame.draw.line(self.image, settings.bright, (216 + x_adjust, 134 + y_adjust), (251 + x_adjust, 134 + y_adjust), 9)
+
         #Stat text
-        settings.FreeRobotoB[24].render_to(self.image, (281, 395), "18", settings.bright) # Ammo count
-        settings.FreeRobotoB[24].render_to(self.image, (406, 395), "10", settings.bright) # Armor count
-        settings.FreeRobotoB[24].render_to(self.image, (447, 395), "20", settings.bright) # Energy count
-        settings.FreeRobotoB[24].render_to(self.image, (490, 395), "10", settings.bright) # Rad count
-        #
-        # # Bottom text
-        # settings.FreeRobotoB[30].render_to(self.image, (7, 509), "HP 115/115", settings.bright)
-        # settings.FreeRobotoB[24].render_to(self.image, (188, 513), "LEVEL 66", settings.bright)
-        # settings.FreeRobotoB[30].render_to(self.image, (602, 509), "AP 90/90", settings.bright)
+        settings.FreeRobotoB[24].render_to(self.image, (281 + x_adjust, 395 + y_adjust), "18", settings.bright) # Ammo count
+        settings.FreeRobotoB[24].render_to(self.image, (406 + x_adjust, 395 + y_adjust), "10", settings.bright) # Armor count
+        settings.FreeRobotoB[24].render_to(self.image, (447 + x_adjust, 395 + y_adjust), "20", settings.bright) # Energy count
+        settings.FreeRobotoB[24].render_to(self.image, (490 + x_adjust, 395 + y_adjust), "10", settings.bright) # Rad count
 
         #User name
-        settings.FreeRobotoB[24].render_to(self.image, (301, 448), settings.name, settings.bright)
+        settings.FreeRobotoB[24].render_to(self.image, (301 + x_adjust, 448 + y_adjust), settings.name, settings.bright)
 
     # def handle_resume(self):
     #     pass

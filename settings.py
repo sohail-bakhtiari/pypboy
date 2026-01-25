@@ -23,15 +23,15 @@ OUTPUT_HEIGHT = 480
 
 # Menu Position
 menu_x = 10
-menu_y = 115 #140
+menu_y = 50 #115 #140
 
 # Menu Position
 footer_x = 0
 footer_y = 445 #631
 
 # Description box Position
-description_box_x = 350
-description_box_y = 240
+description_box_x = 400 #350
+description_box_y = 240 #240
 
 # COLORS
 black = (0, 0, 0)
