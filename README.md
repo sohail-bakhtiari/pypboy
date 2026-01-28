@@ -13,8 +13,18 @@ Since I am running this on a "Lite" version of Raspberry PI OS, with no desktop,
 - Footer shows date in ISO 8601 format (YYYY-MM-DD).
 - Footer displays current IP address for easy SSH access.
 
-## Autorun as a service
+## Screenshots
 
+| Stat | Perks |
+| :---: | :---: |
+| ![Alt text](Screenshots/Stat.jpg) | ![Alt text](Screenshots/Perks.jpg) |
+
+| Inv | Map |
+| :---: | :---: |
+| ![Alt text](Screenshots/Inv.jpg) | ![Alt text](Screenshots/Map.jpg) |
+
+
+## Autorun as a service
 
 To make the Pip-Boy start automatically on a Raspberry Pi, the best method is using **systemd**. This ensures that the program starts after the network and graphics are ready, and it can automatically restart the app if it crashes.
 
